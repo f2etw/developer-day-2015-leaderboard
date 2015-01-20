@@ -298,6 +298,47 @@ md-card-content {
 md-progress-circular {
   display: inline-block; }
 
+md-card-content .data-wrapper {
+  text-align: center; }
+md-card-content .avatar {
+  display: inline-block;
+  width: 23%;
+  padding: 8px;
+  box-sizing: border-box; }
+  md-card-content .avatar img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%; }
+md-card-content .rwd-square {
+  display: inline-block;
+  width: 100%;
+  padding-top: 100%;
+  position: relative; }
+md-card-content .note {
+  position: absolute;
+  top: -3%;
+  right: 3%;
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 13px;
+  background-color: red;
+  color: rgba(255, 255, 255, 0.87);
+  z-index: 2; }
+
+md-card img.banner {
+  width: 100%; }
+
+.md-fab.large {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; }
+
 .ir {
   background-color: transparent;
   border: 0;

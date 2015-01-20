@@ -11,9 +11,20 @@ myApp.controller('FetchCtrl', ['$scope','$rootScope','$http','$mdDialog','$cooki
                     1464131500488875, 
                     1439747729634154
                   ];
+  $scope.totalPosts = [];
+  $scope.pushPostInArray = function(userPosts) {
+    console.log('pushPostInArray...');
+    angular.forEach(userPosts, function(post) {
+      this.push(post);
+    }, $scope.totalPosts)
+  }
+  $scope.totalLikeCount = 0;
+  $scope.countTotalLike = function(like) {
+    $scope.totalLikeCount += like;
+  }
 }]);
 
-myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', function($http, $cookieStore, $sce, $mdDialog, $q){
+myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', 'TempPosts', function($http, $cookieStore, $sce, $mdDialog, $q, TempPosts) {
   return {
     link: function($scope, iElm, iAttrs) {
       var url = 'https://graph.facebook.com/v2.2/'+ iAttrs.fetchData +'/feed';
@@ -55,7 +66,7 @@ myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', fu
             this.push(feed);
           }, $scope.feeds);
           var currentTime = new Date($scope.feeds[$scope.feeds.length - 1].created_time).getTime();
-          console.log($scope.feeds[$scope.feeds.length - 1].created_time);
+          // console.log($scope.feeds[$scope.feeds.length - 1].created_time);
           var untilTime = new Date(until).getTime();
           if (currentTime >= untilTime) {
             $scope.nextPage();
@@ -95,6 +106,7 @@ myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', fu
           })
           console.log(total_count);
           $scope.total_count = total_count;
+          $scope.countTotalLike(total_count);
         })
       }
 
@@ -189,7 +201,10 @@ myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', fu
           }
         }, $scope.userPosts);
         // console.log($scope.userPosts);
+        TempPosts[iAttrs.fetchData] = $scope.userPosts;
+        console.log(iAttrs.fetchData, TempPosts);
         $scope.countLikes($scope.userPosts);
+        $scope.pushPostInArray($scope.userPosts);
       };
 
       $scope.refreshPage = function() {

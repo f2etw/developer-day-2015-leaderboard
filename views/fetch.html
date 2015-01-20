@@ -1,3 +1,4 @@
+
 <md-card ng-repeat="group in groups">
   <div class="info-wrapper">
     <div class="title-wrapper">
@@ -8,7 +9,6 @@
     <div class="progress">
       {{progress}}%
       <md-progress-circular md-mode="determinate" value="{{progress}}"></md-progress-circular>
-      最後更新時間：{{lastUpdate | date:'yyyy/MM/dd h:mma'}}
       <md-button class="md-raised md-primary" ng-click="refreshPage()">更新資料</md-button>
     </div>
     <md-divider></md-divider>
@@ -19,5 +19,40 @@
 <!--     <div ng-repeat="feed in userPosts">
       <p>{{feed.message}} - {{feed.created_time}}</p>
     </div> -->
+  </md-card-content>
+</md-card>
+<md-card>
+  <img class="banner" src="img/banner.jpg" alt="開發者忘年會">
+  <md-card-content>
+    <div class="data-wrapper">
+      <a ng-show="fbId" target="_blank" class="avatar" ng-href="https://www.facebook.com/{{fbId}}">
+        <span class="rwd-square">
+          <img ng-src="http://graph.facebook.com/{{fbId}}/picture?type=large" alt="">
+        </span>
+      </a>
+      <a href="" class="avatar">
+        <span class="rwd-square">
+          <span class="note">{{totalPosts.length}}</span>
+          <md-button class="md-fab large md-primary" aria-label="Total Posts">
+            <i class="fa fa-file-text fa-2x"></i>
+          </md-button>
+        </span>
+      </a>
+      <a href="" class="avatar">
+        <span class="rwd-square">
+          <span class="note">{{totalLikeCount}}</span>
+          <md-button class="md-fab large md-accent" aria-label="Total Likes">
+            <i class="fa fa-thumbs-up fa-2x"></i>
+          </md-button>
+        </span>
+      </a>
+      <a href="" class="avatar">
+        <span class="rwd-square">
+          <md-button class="md-fab large md-warn" aria-label="Total Likes">
+            <span class="fa-2x">報到</span>
+          </md-button>
+        </span>
+      </a>
+    </div>
   </md-card-content>
 </md-card>
