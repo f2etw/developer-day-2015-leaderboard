@@ -1,0 +1,23 @@
+<md-card ng-repeat="group in groups">
+  <div class="info-wrapper">
+    <div class="title-wrapper">
+      <h2>{{groupName}}</h2>
+    </div>
+  </div>
+  <md-card-content fetch-data="{{group}}">
+    <div class="progress">
+      {{progress}}%
+      <md-progress-circular md-mode="determinate" value="{{progress}}"></md-progress-circular>
+      最後更新時間：{{lastUpdate | date:'yyyy/MM/dd h:mma'}}
+      <md-button class="md-raised md-primary" ng-click="refreshPage()">更新資料</md-button>
+    </div>
+    <md-divider></md-divider>
+
+    
+    <p ng-cloak>你有 {{userPosts.length}} 篇貼文</p>
+    <p>你的貼文共得到 {{total_count}} 個讚</p>
+<!--     <div ng-repeat="feed in userPosts">
+      <p>{{feed.message}} - {{feed.created_time}}</p>
+    </div> -->
+  </md-card-content>
+</md-card>
