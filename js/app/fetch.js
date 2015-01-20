@@ -12,22 +12,28 @@ myApp.controller('FetchCtrl', ['$scope','$rootScope','$http','$mdDialog','$cooki
                     1439747729634154
                   ];
   $scope.totalPosts = [];
+  $scope.totalComments = [];
   $scope.pushPostInArray = function(userPosts) {
     console.log('pushPostInArray...');
     angular.forEach(userPosts, function(post) {
       this.push(post);
-    }, $scope.totalPosts)
+    }, $scope.totalPosts);
   }
   $scope.totalLikeCount = 0;
   $scope.countTotalLike = function(like) {
     $scope.totalLikeCount += like;
+  }
+  $scope.countTotalComment = function(comments) {
+    angular.forEach(comments, function(comment) {
+      this.push(comment);
+    }, $scope.totalComments);
   }
 }]);
 
 myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', 'TempPosts', function($http, $cookieStore, $sce, $mdDialog, $q, TempPosts) {
   return {
     link: function($scope, iElm, iAttrs) {
-      var url = 'https://graph.facebook.com/v2.2/'+ iAttrs.fetchData +'/feed';
+      var url = 'https://graph.facebook.com/v2.2/'+ iAttrs.fetchData +'/feed?comments.limit(150)&limit=150';
       var infoUrl = 'https://graph.facebook.com/v2.2/'+ iAttrs.fetchData + '?access_token='+ $scope.accessToken;
       var today = new Date().getTime();
       console.log(iAttrs.fetchData);
@@ -48,7 +54,7 @@ myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', 'T
 
       // 取得貼文
       $scope.feeds = [];
-      $scope.next = url+'?access_token='+ $scope.accessToken;
+      $scope.next = url+'&access_token='+ $scope.accessToken;
       $scope.nextPage = function() {
         $http.get($scope.next).
         success(function(data, status, headers, config) {
@@ -73,10 +79,10 @@ myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', 'T
             $scope.progress = Math.floor(( 1 - (currentTime - untilTime)/(today - untilTime) )*100);
           } else {
             $scope.progress = 100;
-            $scope.findUserPosts();
             // 儲存
             localStorage.setItem(iAttrs.fetchData, angular.toJson($scope.feeds));
             $cookieStore.put(iAttrs.fetchData + 'update', new Date().getTime());
+            $scope.findUserPosts();
           }
           
         }).
@@ -110,101 +116,34 @@ myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', 'T
         })
       }
 
-      $scope.countComments = function(posts) {
-        var postList = [];
-        angular.forEach(posts, function(post) {
-          // console.log(value.id);
-          this.push(
-            $http({
-              method: 'GET',
-              url: 'https://graph.facebook.com/v2.2/'+post.id+'/comments' + '?access_token='+ $scope.accessToken + '&summary=true'
-            })
-          )
-        }, postList);
-        // console.log(postList);
-        $q.all(postList).then(function(res) {
-          // console.log(res);
-          var yourComments = [];
-          angular.forEach(res, function(comments) {
-            // console.log(value.data.summary.total_count);
-            // total_count += value.data.summary.total_count;
-            if (comments.data.summary.total_count > 25) {
-              console.log(comments.data);
-              angular.forEach(comments.data.data, function(comment) {
-                if (!comment.from) {
-                } else {
-                  if($scope.uid == comment.from.id) {
-                    yourComments.push(comment);
-                  }
-                }
-              })
-              var nextCommentPage = comments.data.paging.next;
-              var getNextPage = function(url) {
-                $http({
-                  method: 'GET',
-                  url: nextCommentPage
-                }).
-                success(function(data, status, headers, config) {
-                  // console.log(data);
-                  if (!data.paging.next) {
-                    // 最後一面了
-                    angular.forEach(data.data, function (comment) {
-                      // console.log(comment)
-                      if (!comment.from) {
-                      } else {
-                        if($scope.uid == comment.from.id) {
-                          yourComments.push(comment);
-                        }
-                      }
-                    });
-                  } else {
-                    // 還有下一面
-                    angular.forEach(data.data, function (comment) {
-                      // console.log(comment)
-                      if (!comment.from) {
-                      } else {
-                        if($scope.uid == comment.from.id) {
-                          yourComments.push(comment);
-                        }
-                      }
-                    });
-                    nextCommentPage = data.paging.next;
-                    getNextPage(nextCommentPage);
-                  }
-                })
-              }
-              getNextPage(nextCommentPage);
 
-            } else {
-              if (comments.data.summary.total_count > 0) {
-                angular.forEach(comments.data.data, function (comment) {
-                  // console.log(comment)
-                  if (!comment.from) {
-                  } else {
-                    if($scope.uid == comment.from.id) {
-                      yourComments.push(comment);
-                    }
-                  }
-                });
-              }
-            }
-          })
-          console.log(yourComments);
-        })
-      }
 
       $scope.userPosts = [];
+      $scope.userComments = [];
       $scope.findUserPosts = function() {
         angular.forEach($scope.feeds, function(feed) {
           if (feed.from.id == $scope.uid ) {
             this.push(feed);
           }
+          if (!feed.comments) {
+            return
+          } else {
+            angular.forEach(feed.comments.data, function(comment) {
+              console.log(comment.from);
+              if (!comment.from) { return; }
+              if (comment.from.id == $scope.uid) {
+                this.push(comment);
+              }
+            }, $scope.userComments);
+          }
         }, $scope.userPosts);
         // console.log($scope.userPosts);
+        // console.log($scope.userComments);
         TempPosts[iAttrs.fetchData] = $scope.userPosts;
         console.log(iAttrs.fetchData, TempPosts);
         $scope.countLikes($scope.userPosts);
         $scope.pushPostInArray($scope.userPosts);
+        $scope.countTotalComment($scope.userComments);
       };
 
       $scope.refreshPage = function() {

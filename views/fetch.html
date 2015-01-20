@@ -16,6 +16,7 @@
     
     <p ng-cloak>你有 {{userPosts.length}} 篇貼文</p>
     <p>你的貼文共得到 {{total_count}} 個讚</p>
+    <p>你回應了 {{userComments.length}} 個評論</p>
 <!--     <div ng-repeat="feed in userPosts">
       <p>{{feed.message}} - {{feed.created_time}}</p>
     </div> -->
@@ -25,11 +26,6 @@
   <img class="banner" src="img/banner.jpg" alt="開發者忘年會">
   <md-card-content>
     <div class="data-wrapper">
-      <a ng-show="fbId" target="_blank" class="avatar" ng-href="https://www.facebook.com/{{fbId}}">
-        <span class="rwd-square">
-          <img ng-src="http://graph.facebook.com/{{fbId}}/picture?type=large" alt="">
-        </span>
-      </a>
       <a href="" class="avatar">
         <span class="rwd-square">
           <span class="note">{{totalPosts.length}}</span>
@@ -43,6 +39,14 @@
           <span class="note">{{totalLikeCount}}</span>
           <md-button class="md-fab large md-accent" aria-label="Total Likes">
             <i class="fa fa-thumbs-up fa-2x"></i>
+          </md-button>
+        </span>
+      </a>
+      <a href="" class="avatar">
+        <span class="rwd-square">
+          <span class="note">{{totalComments.length}}</span>
+          <md-button class="md-fab large md-primary" aria-label="Total Posts">
+            <i class="fa fa-comments fa-2x"></i>
           </md-button>
         </span>
       </a>
