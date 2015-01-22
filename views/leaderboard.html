@@ -1,0 +1,19 @@
+<md-content>
+  <md-list>
+    <md-item ng-repeat="user in users">
+      <md-item-content>
+        <div class="md-tile-left">
+          <img ng-src="http://graph.facebook.com/{{user.uid}}/picture?type=large" class="face" alt="{{user.name}}">
+        </div>
+        <div class="md-tile-content">
+          <h3>{{user.name}}</h3>
+          <!-- <h4>{{item.who}}</h4> -->
+          <p>
+            積分：{{user.score}}
+          </p>
+        </div>
+      </md-item-content>
+      <md-divider md-inset ng-if="!$last"></md-divider>
+    </md-item>
+  </md-list>
+</md-content>

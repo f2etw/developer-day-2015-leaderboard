@@ -1,4 +1,5 @@
-myApp.controller('FetchCtrl', ['$scope','$rootScope','$http','$mdDialog','$cookieStore', function($scope, $rootScope, $http, $mdDialog, $cookieStore) {
+myApp.controller('FetchCtrl', ['$scope','$rootScope','$http','$mdDialog','$cookieStore','$location', function($scope, $rootScope, $http, $mdDialog, $cookieStore, $location) {
+  var leaderBoardRef = new Firebase('https://devparty.firebaseio.com/leaderBoard');
   console.log($cookieStore.get('expire'));
   console.log($cookieStore.get('accessToken'));
   $scope.accessToken = $cookieStore.get('accessToken');
@@ -26,6 +27,17 @@ myApp.controller('FetchCtrl', ['$scope','$rootScope','$http','$mdDialog','$cooki
     angular.forEach(comments, function(comment) {
       this.push(comment);
     }, $scope.totalComments);
+  }
+  $scope.setScore = function() {
+    var userScoreRef = leaderBoardRef.child($scope.uid);
+    var name = $cookieStore.get('name');
+    var score = $scope.totalPosts.length * 5 + $scope.totalLikeCount + $scope.totalComments.length * 5;
+    userScoreRef.setWithPriority({
+      name: name,
+      uid: $scope.uid,
+      score: score
+    }, score);
+    $location.path('/leaderboard');
   }
 }]);
 

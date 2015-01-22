@@ -14,6 +14,10 @@ myApp.config(['$routeProvider',
       templateUrl: 'views/fetch.html',
       controller: 'FetchCtrl'
     }).
+    when('/leaderboard', {
+      templateUrl: 'views/leaderboard',
+      controller: 'BoardCtrl'
+    }).
     otherwise({
       redirectTo: '/login'
     });
@@ -48,6 +52,7 @@ myApp.controller('LoginCtrl', ['$scope','$http','$mdDialog','$cookieStore','$loc
         $cookieStore.put('expire', authData.expires);
         $cookieStore.put('accessToken', authData.facebook.accessToken);
         $cookieStore.put('uid', authData.facebook.id);
+        $cookieStore.put('name', authData.facebook.displayName);
         $rootScope.fbId = authData.facebook.id;
         $location.path('/fetch');
         $scope.$apply();
