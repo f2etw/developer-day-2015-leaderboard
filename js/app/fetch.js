@@ -84,6 +84,8 @@ myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', 'T
           var currentTime = new Date($scope.feeds[$scope.feeds.length - 1].created_time).getTime();
           // console.log($scope.feeds[$scope.feeds.length - 1].created_time);
           var untilTime = new Date(2013,11,31).getTime();
+          console.log(untilTime);
+          console.log(currentTime - untilTime);
           if (currentTime >= untilTime) {
             $scope.nextPage();
             $scope.progress = Math.floor(( 1 - (currentTime - untilTime)/(today - untilTime) )*100);
