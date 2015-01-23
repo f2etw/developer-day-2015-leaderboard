@@ -83,7 +83,7 @@ myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', 'T
           }, $scope.feeds);
           var currentTime = new Date($scope.feeds[$scope.feeds.length - 1].created_time).getTime();
           // console.log($scope.feeds[$scope.feeds.length - 1].created_time);
-          var untilTime = new Date(until).getTime();
+          var untilTime = new Date(2013,11,31).getTime();
           if (currentTime >= untilTime) {
             $scope.nextPage();
             $scope.progress = Math.floor(( 1 - (currentTime - untilTime)/(today - untilTime) )*100);
@@ -155,6 +155,7 @@ myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', 'T
       };
 
       $scope.refreshPage = function() {
+        localStorage.removeItem(iAttrs.fetchData);
         localStorage.removeItem(iAttrs.fetchData + 'feed');
         localStorage.removeItem(iAttrs.fetchData + 'comment');
         $scope.userPosts = [];
