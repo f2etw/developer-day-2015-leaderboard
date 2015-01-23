@@ -81,11 +81,14 @@ myApp.directive('fetchData', ['$http','$cookieStore','$sce','$mdDialog','$q', 'T
           angular.forEach(data.data, function(feed) {
             this.push(feed);
           }, $scope.feeds);
-          var currentTime = new Date($scope.feeds[$scope.feeds.length - 1].created_time).getTime();
-          // console.log($scope.feeds[$scope.feeds.length - 1].created_time);
+          var timeArray = $scope.feeds[$scope.feeds.length - 1].created_time.split("-");
+          var yy = timeArray[0],
+              mm = timeArray[1] - 1
+              dd = timeArray[2].split("T")[0];
+
+          var currentTime = new Date(yy, mm, dd).getTime();
           var untilTime = new Date(2013,11,31).getTime();
-          console.log(untilTime);
-          console.log(currentTime - untilTime);
+
           if (currentTime >= untilTime) {
             $scope.nextPage();
             $scope.progress = Math.floor(( 1 - (currentTime - untilTime)/(today - untilTime) )*100);
