@@ -35,9 +35,15 @@ myApp.controller('FetchCtrl', ['$scope','$rootScope','$http','$mdDialog','$cooki
     userScoreRef.setWithPriority({
       name: name,
       uid: $scope.uid,
+      post_count: $scope.totalPosts.length,
+      like_count: $scope.totalLikeCount,
+      comment_count: $scope.totalComments.length,
       score: score
-    }, score);
-    $location.path('/leaderboard');
+    }, score, function() {
+      $location.path('/leaderboard');
+      $scope.$apply();
+    });
+    
   }
 }]);
 

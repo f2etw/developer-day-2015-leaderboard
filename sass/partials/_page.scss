@@ -144,3 +144,18 @@ md-card img.banner {
   height: 100%;
   z-index: 1;
 }
+
+md-item-content {
+  .md-tile-left {
+    padding: 16px;
+    img {
+      width: 48px;
+      height: 48px;
+    }
+  }
+  .md-tile-content {
+    .text {
+      margin-right: 10px;
+    }
+  }
+}

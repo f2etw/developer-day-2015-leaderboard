@@ -3,13 +3,16 @@
     <md-item ng-repeat="user in users">
       <md-item-content>
         <div class="md-tile-left">
-          <img ng-src="http://graph.facebook.com/{{user.uid}}/picture?type=large" class="face" alt="{{user.name}}">
+          <img ng-src="https://graph.facebook.com/{{user.uid}}/picture?width=150&height=150" class="face" alt="{{user.name}}">
         </div>
         <div class="md-tile-content">
           <h3>{{user.name}}</h3>
           <!-- <h4>{{item.who}}</h4> -->
           <p>
-            積分：{{user.score}}
+            <span class="text">積分：{{user.score}}</span>
+            <span class="text">貼文：{{user.post_count}} 篇</span>
+            <span class="text">得到 {{user.like_count}} 讚</span>
+            <span class="text">回文：{{user.comment_count}} 次</span>
           </p>
         </div>
       </md-item-content>
