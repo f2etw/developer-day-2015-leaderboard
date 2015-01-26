@@ -59,6 +59,8 @@ myApp.controller('LoginCtrl', ['$scope','$http','$mdDialog','$cookieStore','$loc
 
      
       }
+    }, {
+      scope: "email, public_profile, user_friends"
     });
   }
 }]);
